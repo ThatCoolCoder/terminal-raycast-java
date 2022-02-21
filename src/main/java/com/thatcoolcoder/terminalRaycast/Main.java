@@ -21,23 +21,23 @@ public class Main {
         try {
             var _walls = new ArrayList<Wall>();
             _walls.add(new Wall() {{
-                start = new Vector3d(-1, 5, 0);
-                end = new Vector3d(1, 5, 0);
+                start = new Vector3d(-1, 2.5f, 0);
+                end = new Vector3d(1, 2.5f, 0);
                 height = 0.5f;
             }});
             _walls.add(new Wall() {{
-                start = new Vector3d(-1, 5, 0);
-                end = new Vector3d(-1, 0, 0);
+                start = new Vector3d(-1, 2.5f, 0);
+                end = new Vector3d(-1, -2.5f, 0);
                 height = 0.5f;
             }});
             _walls.add(new Wall() {{
-                start = new Vector3d(1, 5, 0);
-                end = new Vector3d(1, 0, 0);
+                start = new Vector3d(1, 2.5f, 0);
+                end = new Vector3d(1, -2.5f, 0);
                 height = 0.5f;
             }});
 
             var player = new Player() {{
-                position = new Vector3d();
+                position = new Vector3d(0, -4, 0);
                 fieldOfView = (float) (Math.PI / 2);
                 angle = 0;
                 viewDistance = 10;
@@ -61,16 +61,18 @@ public class Main {
 
     private static void play(RenderCanvas canvas, Screen screen, Player player) throws IOException {
         while (true) {
+            long frameStart = System.nanoTime();
             var input = screen.pollInput();
-            if (input != null && input.getCharacter() == 'q') break;
+            if (input != null && input.getCharacter() != null && input.getCharacter() == 'q') break;
             player.useInput(input);
             player.move(frameRate);
             
             canvas.render();
 
+            long frameEnd = System.nanoTime();
             try
             {
-                Thread.sleep((long) (frameRate * 1000));
+                Thread.sleep((long) Math.max((frameRate * 1000) - (frameEnd - frameStart) * 10e6, 0));
             }
             catch(InterruptedException ex)
             {
