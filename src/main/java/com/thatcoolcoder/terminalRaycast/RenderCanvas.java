@@ -14,6 +14,8 @@ public class RenderCanvas {
     World world;
     TextGraphics textGraphics;
     Screen screen;
+    String shadingChars = "█$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
+    // String shadingChars = "█MLlo-.";
 
     public RenderCanvas(Screen _screen, World _world, TerminalSize _terminalSize) {
         screen = _screen;
@@ -79,14 +81,29 @@ public class RenderCanvas {
         screen.clear();
         float verticalFieldOfView = (float) terminalSize.getRows() / (float) terminalSize.getColumns() *
             world.viewpoint.fieldOfView;
+
+        float[] rowAngles = new float[terminalSize.getRows()];
+        for (var i = 0; i < terminalSize.getRows(); i ++) {
+            rowAngles[i] = ((float) (i / terminalSize.getRows() - terminalSize.getRows() / 2)) * verticalFieldOfView;
+        }
+
         for (var intersection : intersections) {
             float angle = (float) Math.atan(intersection.wall.height / intersection.distance);
             int columnHeight = (int) (angle / verticalFieldOfView * terminalSize.getRows());
-                
-            textGraphics.drawRectangle(
-                new TerminalPosition(intersection.rayNumber,
-                    terminalSize.getRows() / 2 - columnHeight / 2),
-                new TerminalSize(1, columnHeight), '#');
+            
+            for (var i = 0; i < columnHeight; i ++) {
+                float verticalPos = (float) Math.tan(rowAngles[i]) * intersection.distance;
+                float trueDistance = (float) Math.sqrt(
+                    (intersection.distance * intersection.distance + verticalPos * verticalPos));
+                float darkness = trueDistance / world.viewpoint.viewDistance;
+
+                char character = shadingChars.charAt((int) (darkness * shadingChars.length()));
+
+                textGraphics.drawRectangle(
+                    new TerminalPosition(intersection.rayNumber,
+                        i + terminalSize.getRows() / 2 - columnHeight / 2),
+                    new TerminalSize(1, 1), character);
+            }
         }
         screen.refresh(RefreshType.DELTA);
     }

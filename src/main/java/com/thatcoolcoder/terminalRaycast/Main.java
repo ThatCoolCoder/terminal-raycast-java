@@ -40,7 +40,7 @@ public class Main {
                 position = new Vector3d();
                 fieldOfView = (float) (Math.PI / 2);
                 angle = 0;
-                viewDistance = 20;
+                viewDistance = 10;
             }};
 
             var world = new World() {{
