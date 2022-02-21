@@ -89,7 +89,7 @@ public class RenderCanvas {
             float darkness = intersection.distance / world.viewpoint.viewDistance;
 
             int charIdx = (int) (darkness * shadingChars.length());
-            charIdx = Math.min(Math.max(charIdx, 0), shadingChars.length());
+            charIdx = Math.min(Math.max(charIdx, 0), shadingChars.length() - 1);
             char character = shadingChars.charAt(charIdx);
 
             textGraphics.drawRectangle(

@@ -40,7 +40,7 @@ public class Main {
                 position = new Vector3d(0, -4, 0);
                 fieldOfView = (float) (Math.PI / 2);
                 angle = 0;
-                viewDistance = 10;
+                viewDistance = 30;
             }};
 
             var world = new World() {{
@@ -60,19 +60,23 @@ public class Main {
     }
 
     private static void play(RenderCanvas canvas, Screen screen, Player player) throws IOException {
+        float deltaTime = 0;
         while (true) {
             long frameStart = System.nanoTime();
             var input = screen.pollInput();
             if (input != null && input.getCharacter() != null && input.getCharacter() == 'q') break;
             player.useInput(input);
-            player.move(frameRate);
+            player.move(deltaTime);
             
             canvas.render();
 
             long frameEnd = System.nanoTime();
+            float renderTime = (float) ((frameEnd - frameStart) / 10e9);
+            float sleepLength = Math.max(frameRate - renderTime, 0);
+            deltaTime = sleepLength + renderTime;
             try
             {
-                Thread.sleep((long) Math.max((frameRate * 1000) - (frameEnd - frameStart) * 10e6, 0));
+                Thread.sleep((long) (sleepLength * 1000));
             }
             catch(InterruptedException ex)
             {
