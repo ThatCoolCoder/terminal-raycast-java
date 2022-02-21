@@ -5,4 +5,8 @@ public class Viewpoint {
     public float angle;
     public float fieldOfView;
     public float viewDistance;
+
+    public Viewpoint() {
+
+    }
 }

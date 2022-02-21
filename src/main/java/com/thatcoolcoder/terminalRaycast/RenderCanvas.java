@@ -7,6 +7,7 @@ import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.Screen;
+import com.googlecode.lanterna.screen.Screen.RefreshType;
 
 public class RenderCanvas {
     public TerminalSize terminalSize;
@@ -87,7 +88,7 @@ public class RenderCanvas {
                     terminalSize.getRows() / 2 - columnHeight / 2),
                 new TerminalSize(1, columnHeight), '#');
         }
-        screen.refresh();
+        screen.refresh(RefreshType.DELTA);
     }
 }
 
