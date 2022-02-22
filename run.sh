@@ -1,0 +1,1 @@
+java -jar $(find target -name "*-jar-with-dependencies.jar")
