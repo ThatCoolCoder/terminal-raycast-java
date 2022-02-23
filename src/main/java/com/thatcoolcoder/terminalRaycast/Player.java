@@ -1,9 +1,12 @@
 package com.thatcoolcoder.terminalRaycast;
 
+import java.util.ArrayList;
+
 import com.googlecode.lanterna.input.KeyStroke;
 
 public class Player extends Viewpoint {
     private float maxSpeed = 2;
+    private float radius = 0.1f;
     private Vector3d velocity = new Vector3d(0, 0, 0);
     private float maxRotationSpeed = (float) (Math.PI / 3);
     private float rotationSpeed = 0;
@@ -35,5 +38,11 @@ public class Player extends Viewpoint {
     public void move(float deltaTime) {
         position.add(Vector3d.mult(Vector3d.rotate(velocity, angle, true), deltaTime));
         angle += rotationSpeed * deltaTime;
+    }
+
+    public void collideWalls(ArrayList<Wall> walls) {
+        for (var wall : walls) {
+
+        }
     }
 }

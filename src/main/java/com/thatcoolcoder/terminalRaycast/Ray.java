@@ -79,4 +79,22 @@ public class Ray {
 
         return intersection;
     }
+
+    public float distanceToPoint(Vector3d point) {
+        // https://stackoverflow.com/a/1079478
+        // var ac = Vector3d.sub(point, start);
+        // var ab = Vector3d.sub(end, start);
+        // var d = Vector3d.add(Vector3d.project(ac, ab), start);
+        // var ad = Vector3d.sub(d, start);
+        // var k = Math.abs(ab.x) > Math.abs(ab.y) ? ad.x / ab.x : ad.y / ab.y;
+
+        // if (k <= 0.0) {
+        //     return Math.sqrt(hypot2(point, start));
+        // } else if (k >= 1.0) {
+        //     return Math.sqrt(hypot2(point, end));
+        // }
+    
+        // return Math.sqrt(hypot2(point, d));
+        return 4.2f;
+    }
 }

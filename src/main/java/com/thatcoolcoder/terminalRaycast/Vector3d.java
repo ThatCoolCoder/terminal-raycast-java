@@ -1,5 +1,7 @@
 package com.thatcoolcoder.terminalRaycast;
 
+import java.util.Vector;
+
 // I couldn't find a single decent vector implementation so I wrote one myself.
 // Would be nice to support generics but java generics are not that great apparently.
 public class Vector3d {
@@ -250,4 +252,56 @@ public class Vector3d {
     }
 
     //#endregion Angles
+    
+    /**
+     * Compute dot product between this vector and another
+     * @param v
+     * @return
+     */
+    public float dot(Vector3d v) {
+        return x * v.x + y + v.y + z + v.z;
+    }
+
+    /**
+     * Set this vector to the cross product of this and another vector
+     * @param v
+     */
+    public void cross(Vector3d v) {
+        float newX = y * v.z - z * v.y;
+        float newY = z * v.x - x * v.z;
+        float newZ = x * v.y - y * v.x;
+        x = newX;
+        y = newY;
+        z = newZ;
+    }
+
+    /**
+     * Return the cross product between two vectors
+     * @param v1
+     * @param v2
+     * @return
+     */
+    public static Vector3d cross(Vector3d v1, Vector3d v2) {
+        return new Vector3d(
+            v1.y * v2.z - v1.z * v2.y,
+            v1.z * v2.x - v1.x * v2.z,
+            v1.x * v2.y - v1.y * v2.x
+        );
+    }
+
+    /**
+     * Project this vector onto another
+     * @param v
+     */
+    public void project(Vector3d v) {
+        float k = dot(v) / v.dot(v);
+        x = k * v.x;
+        y = k * v.y;
+        z = k * v.z;
+    }
+
+    public static Vector3d project(Vector3d v1, Vector3d v2) {
+        float k = v1.dot(v2) / v1.dot(v1);
+        return new Vector3d(v2.x * k, v2.y * k, v2.z * k);
+    }
 }
