@@ -46,7 +46,7 @@ public class Ray {
     }
 
     /**
-     * Find intersection point of this and another ray.
+     * Find intersection circleCenter of this and another ray.
      * Returns null if no intersection
      * @param ray
      * @return
@@ -80,21 +80,29 @@ public class Ray {
         return intersection;
     }
 
-    public float distanceToPoint(Vector3d point) {
-        // https://stackoverflow.com/a/1079478
-        // var ac = Vector3d.sub(point, start);
-        // var ab = Vector3d.sub(end, start);
-        // var d = Vector3d.add(Vector3d.project(ac, ab), start);
-        // var ad = Vector3d.sub(d, start);
-        // var k = Math.abs(ab.x) > Math.abs(ab.y) ? ad.x / ab.x : ad.y / ab.y;
+    public Vector3d moveCircleAway(Vector3d circleCenter, float circleRadius) {
+        // based on https://stackoverflow.com/a/1079478
+        var ac = Vector3d.sub(circleCenter, start);
+        var ab = Vector3d.sub(end, start);
+        var d = Vector3d.add(Vector3d.project(ac, ab), start);
+        var ad = Vector3d.sub(d, start);
+        var k = Math.abs(ab.x) > Math.abs(ab.y) ? ad.x / ab.x : ad.y / ab.y;
 
-        // if (k <= 0.0) {
-        //     return Math.sqrt(hypot2(point, start));
-        // } else if (k >= 1.0) {
-        //     return Math.sqrt(hypot2(point, end));
-        // }
+        float distanceSq = circleCenter.distSq(d);
+        if (k <= 0.0) {
+            distanceSq = circleCenter.distSq(start);
+        }
+        else if (k >= 1.0) {
+            distanceSq = circleCenter.distSq(end);
+        }
     
-        // return Math.sqrt(hypot2(point, d));
-        return 4.2f;
+        if (distanceSq < circleRadius * circleRadius) {
+            var direction = Vector3d.normalize(Vector3d.sub(d, circleCenter));
+            float indent = circleRadius - (float) Math.sqrt(distanceSq);
+            return Vector3d.add(circleCenter, Vector3d.mult(direction, indent));
+        }
+        else {
+            return circleCenter;
+        }
     }
 }
